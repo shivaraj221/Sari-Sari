@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Store | Sari-Sari - LSU Ozamiz</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Center the feedback form and remove the grid */
+        .feedback-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 40px;
+            min-height: 400px;
+        }
+        
+        .feedback-form {
+            max-width: 700px;
+            width: 100%;
+            margin: 0 auto;
+        }
+        
+        /* Hide the feedback list */
+        #feedback-list {
+            display: none !important;
+        }
+        
+        /* Style for centered form */
+        .form-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .form-header i {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+            display: block;
+        }
+        
+        .form-header h3 {
+            font-size: 2rem;
+            color: var(--dark);
+        }
+        
+        textarea {
+            width: 100%;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            border: 2px solid rgba(255, 107, 107, 0.2);
+            font-family: 'Inter', sans-serif;
+            font-size: 16px;
+            min-height: 200px;
+            resize: vertical;
+            transition: var(--transition);
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(255, 107, 107, 0.1);
+        }
+        
+        .submit-btn {
+            width: 100%;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        /* Success message */
+        .success-message {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            background: rgba(6, 214, 160, 0.1);
+            border-radius: 12px;
+            margin-top: 20px;
+            border: 1px solid rgba(6, 214, 160, 0.3);
+        }
+        
+        .success-message i {
+            color: var(--success);
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        
+        .success-message p {
+            color: var(--dark);
+            font-weight: 500;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Store Header -->
+    <header class="store-header">
+        <div class="container">
+            <div class="store-nav">
+                <div class="store-brand">
+                    <i class="fas fa-store"></i>
+                    <div>
+                        <h1>Sari<span>-Sari</span></h1>
+                        <p class="store-subtitle">La Salle University Ozamiz</p>
+                    </div>
+                </div>
+                
+                <div class="store-user">
+                    <div class="user-info">
+                        <div class="user-avatar" id="user-avatar">U</div>
+                        <div class="user-details">
+                            <span class="user-name" id="user-name">User</span>
+                            <span class="user-status">● Online</span>
+                        </div>
+                    </div>
+                    <button class="btn btn-logout" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Store Hero -->
+    <section class="store-hero">
+        <div class="container">
+            <div class="hero-message">
+                <h2 id="welcome-message">Welcome to Your Campus Store! 🎉</h2>
+                <p>Browse products, share feedback, and help us improve</p>
+            </div>
+            <div class="store-stats">
+                <div class="stat-card">
+                    <i class="fas fa-box"></i>
+                    <div>
+                        <h3 id="product-count">0</h3>
+                        <p>Products Available</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-comments"></i>
+                    <div>
+                        <h3 id="feedback-count">0</h3>
+                        <p>Your Feedbacks</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="products-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Our Products</h2>
+                <div class="category-filter">
+                    <button class="category-btn active" onclick="filterProducts('all')">All Products</button>
+                    <button class="category-btn" onclick="filterProducts('snacks')">Snacks</button>
+                    <button class="category-btn" onclick="filterProducts('drinks')">Drinks</button>
+                    <button class="category-btn" onclick="filterProducts('stationery')">Stationery</button>
+                    <button class="category-btn" onclick="filterProducts('meals')">Meals</button>
+                </div>
+            </div>
+            
+            <div class="products-grid" id="products-grid">
+                <!-- Products will be loaded by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Feedback Section - CENTERED -->
+    <section class="feedback-section">
+        <div class="container">
+            <h2 class="section-title gradient-text text-center">Share Your Feedback</h2>
+            <p class="section-subtitle text-center">Your thoughts help us improve our store</p>
+            
+            <div class="feedback-container">
+                <!-- Centered Feedback Form -->
+                <div class="feedback-form">
+                    <div class="form-header">
+                        <i class="fas fa-edit"></i>
+                        <h3>Write Your Feedback</h3>
+                        <p>We value your opinion! Share what you think about our products and service.</p>
+                    </div>
+                    
+                    <textarea id="feedback-text" 
+                              placeholder="What do you like about our store? What can we improve? Share your thoughts..."
+                              maxlength="500"></textarea>
+                    
+                    <div class="form-footer">
+                        <div class="char-count">
+                            <i class="fas fa-text-height"></i>
+                            <span id="char-counter">0</span>/500 characters
+                        </div>
+                        <button class="btn btn-primary submit-btn" onclick="submitFeedbackWithSuccess()">
+                            <i class="fas fa-paper-plane"></i> Submit Feedback
+                        </button>
+                    </div>
+                    
+                    <!-- Success Message -->
+                    <div id="success-message" class="success-message">
+                        <i class="fas fa-check-circle"></i>
+                        <p>Thank you for your feedback! We appreciate your input.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="store-contact">
+        <div class="container">
+            <h2 class="section-title gradient-text">Contact Us</h2>
+            <p class="section-subtitle">We're here to help</p>
+            
+            <div class="contact-wrapper">
+                <div class="contact-info">
+                    <div class="contact-card">
+                        <h3><i class="fas fa-headset"></i> Get in Touch</h3>
+                        <div class="contact-details">
+                            <div class="contact-item">
+                                <i class="fas fa-phone"></i>
+                                <div>
+                                    <h4>Call Us</h4>
+                                    <p>0912-345-6789</p>
+                                </div>
+                            </div>
+                            <div class="contact-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <div>
+                                    <h4>Location</h4>
+                                    <p>Student Center<br>La Salle University Ozamiz</p>
+                                </div>
+                            </div>
+                            <div class="contact-item">
+                                <i class="fas fa-clock"></i>
+                                <div>
+                                    <h4>Business Hours</h4>
+                                    <p>Mon-Fri: 8:00 AM - 7:00 PM<br>Saturday: 9:00 AM - 5:00 PM</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-form-card">
+                        <h3><i class="fas fa-envelope"></i> Send Message</h3>
+                        <form class="contact-form" onsubmit="submitContactForm(); return false;">
+                            <input type="text" id="contact-name" placeholder="Your Name" required>
+                            <input type="email" id="contact-email" placeholder="Your Email" required>
+                            <textarea id="contact-message" placeholder="Your Message" required></textarea>
+                            <button type="submit" class="btn btn-secondary btn-block">
+                                <i class="fas fa-paper-plane"></i> Send Message
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="store-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="logo">
+                        <i class="fas fa-store"></i>
+                        <h2>Sari<span>-Sari</span></h2>
+                    </div>
+                    <p class="tagline">La Salle University Ozamiz Student Business</p>
+                </div>
+                <div class="footer-social">
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Sari-Sari Store. All rights reserved. | A Student Business Initiative</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Update character counter for feedback
+            const feedbackText = document.getElementById('feedback-text');
+            if (feedbackText) {
+                feedbackText.addEventListener('input', updateCharCount);
+                // Initialize counter
+                updateCharCount();
+            }
+            
+            // Initialize user data
+            const username = localStorage.getItem('username') || 'User';
+            const userAvatar = document.getElementById('user-avatar');
+            const userName = document.getElementById('user-name');
+            const welcomeMsg = document.getElementById('welcome-message');
+            
+            if (username) {
+                if (userAvatar) userAvatar.textContent = username.charAt(0).toUpperCase();
+                if (userName) userName.textContent = username;
+                if (welcomeMsg) welcomeMsg.textContent = `Welcome, ${username}! 🎉`;
+            }
+        });
+        
+        // Character counter function
+        window.updateCharCount = function() {
+            const textarea = document.getElementById('feedback-text');
+            const counter = document.getElementById('char-counter');
+            if (textarea && counter) {
+                const count = textarea.value.length;
+                counter.textContent = count;
+                counter.style.color = count >= 450 ? '#EF476F' : count >= 400 ? '#FFD166' : '#06D6A0';
+            }
+        };
+        
+        // Custom feedback submission with success message
+        window.submitFeedbackWithSuccess = async function() {
+            const message = document.getElementById('feedback-text').value.trim();
+            const token = getToken();
+            
+            if (!message) {
+                showNotification('Please write your feedback first', 'error');
+                return;
+            }
+            
+            if (!token) {
+                showNotification('Please login to submit feedback', 'error');
+                return;
+            }
+            
+            // Disable button and show loading
+            const btn = document.querySelector('.submit-btn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+            btn.disabled = true;
+            
+            try {
+                const res = await fetch(`${API}/feedback/`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Token ${token}`
+                    },
+                    body: JSON.stringify({ message })
+                });
+                
+                if (!res.ok) {
+                    throw new Error('Failed to submit feedback');
+                }
+                
+                // Show success message
+                const successMsg = document.getElementById('success-message');
+                if (successMsg) {
+                    successMsg.style.display = 'block';
+                    // Clear textarea
+                    document.getElementById('feedback-text').value = '';
+                    updateCharCount();
+                    
+                    // Hide message after 5 seconds
+                    setTimeout(() => {
+                        successMsg.style.display = 'none';
+                    }, 5000);
+                }
+                
+                // Update feedback count
+                const feedbackCount = document.getElementById('feedback-count');
+                if (feedbackCount) {
+                    const currentCount = parseInt(feedbackCount.textContent) || 0;
+                    animateCounter(feedbackCount, currentCount + 1);
+                }
+                
+            } catch (error) {
+                showNotification(error.message, 'error');
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        };
+        
+        // Counter animation
+        function animateCounter(element, target) {
+            let current = 0;
+            const increment = target / 20;
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    current = target;
+                    clearInterval(timer);
+                }
+                element.textContent = Math.floor(current);
+            }, 50);
+        }
+    </script>
+</body>
+</html>
