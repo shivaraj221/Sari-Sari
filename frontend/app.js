@@ -1,4 +1,4 @@
-const API = "http://127.0.0.1:8000/api";
+const API = "https://sari-sari.onrender.com/api";
 
 /* =====================
    TOKEN & USER HELPERS
