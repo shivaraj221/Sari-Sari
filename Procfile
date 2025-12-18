@@ -1,0 +1,1 @@
+web: cd main && gunicorn main.wsgi:application

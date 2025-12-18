@@ -1,5 +1,6 @@
-# main/core/tasks.py - UPDATED
+# main/core/tasks.py - UPDATED FOR PRODUCTION
 import threading
+import traceback  # ADD THIS LINE
 from .models import Feedback
 from .utils import analyze_feedback_sentiment
 from django.utils import timezone
@@ -33,15 +34,18 @@ def analyze_sentiment_background(feedback_id: int):
             print(f"⚠️ Feedback {feedback_id} not found in database")
         except Exception as e:
             print(f"❌ Error analyzing feedback {feedback_id}: {str(e)}")
+            print(traceback.format_exc())  # ADD THIS LINE
+            
             # Mark as error
             try:
-                feedback.sentiment = 'ERROR'
-                feedback.reasoning = f"Analysis failed: {str(e)[:200]}"
-                feedback.save()
-            except:
-                print(f"❌ Could not update feedback {feedback_id} with error status")
+                Feedback.objects.filter(id=feedback_id).update(
+                    sentiment='ERROR',
+                    reasoning=f"Analysis failed: {str(e)[:200]}"
+                )
+            except Exception as update_error:
+                print(f"❌ Could not update feedback {feedback_id} with error status: {update_error}")
     
     # Start background thread
     thread = threading.Thread(target=task)
-    thread.daemon = True  # Thread will exit when main program exits
+    thread.daemon = True
     thread.start()

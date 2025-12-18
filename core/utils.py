@@ -51,10 +51,11 @@ def analyze_feedback_sentiment(feedback_text: str) -> dict:
             """
             
             response = client.chat.completions.create(
-                model="qwen/qwen-2.5-vl-7b-instruct:free",
-                messages=[{"role": "user", "content": prompt}],
-                temperature=0,
-                max_tokens=200
+            model="qwen/qwen-2.5-vl-7b-instruct:free",
+            messages=[{"role": "user", "content": prompt}],
+            temperature=0,
+            max_tokens=200,
+            timeout=30  # ADD THIS LINE FOR RENDER
             )
             
             content = response.choices[0].message.content.strip()
