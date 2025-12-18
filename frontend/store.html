@@ -281,14 +281,13 @@
         </div>
     </footer>
 
-    <script src="app.js"></script>
+        <script src="app.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Update character counter for feedback
             const feedbackText = document.getElementById('feedback-text');
             if (feedbackText) {
                 feedbackText.addEventListener('input', updateCharCount);
-                // Initialize counter
                 updateCharCount();
             }
             
@@ -318,81 +317,9 @@
         
         // Custom feedback submission with success message
         window.submitFeedbackWithSuccess = async function() {
-            const message = document.getElementById('feedback-text').value.trim();
-            const token = getToken();
-            
-            if (!message) {
-                showNotification('Please write your feedback first', 'error');
-                return;
-            }
-            
-            if (!token) {
-                showNotification('Please login to submit feedback', 'error');
-                return;
-            }
-            
-            // Disable button and show loading
-            const btn = document.querySelector('.submit-btn');
-            const originalText = btn.innerHTML;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
-            btn.disabled = true;
-            
-            try {
-                const res = await fetch(`${API}/feedback/`, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": `Token ${token}`
-                    },
-                    body: JSON.stringify({ message })
-                });
-                
-                if (!res.ok) {
-                    throw new Error('Failed to submit feedback');
-                }
-                
-                // Show success message
-                const successMsg = document.getElementById('success-message');
-                if (successMsg) {
-                    successMsg.style.display = 'block';
-                    // Clear textarea
-                    document.getElementById('feedback-text').value = '';
-                    updateCharCount();
-                    
-                    // Hide message after 5 seconds
-                    setTimeout(() => {
-                        successMsg.style.display = 'none';
-                    }, 5000);
-                }
-                
-                // Update feedback count
-                const feedbackCount = document.getElementById('feedback-count');
-                if (feedbackCount) {
-                    const currentCount = parseInt(feedbackCount.textContent) || 0;
-                    animateCounter(feedbackCount, currentCount + 1);
-                }
-                
-            } catch (error) {
-                showNotification(error.message, 'error');
-            } finally {
-                btn.innerHTML = originalText;
-                btn.disabled = false;
-            }
+            await submitFeedback();
         };
-        
-        // Counter animation
-        function animateCounter(element, target) {
-            let current = 0;
-            const increment = target / 20;
-            const timer = setInterval(() => {
-                current += increment;
-                if (current >= target) {
-                    current = target;
-                    clearInterval(timer);
-                }
-                element.textContent = Math.floor(current);
-            }, 50);
-        }
     </script>
+    
 </body>
 </html>
