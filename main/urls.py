@@ -1,20 +1,12 @@
-from django.contrib import admin
-from django.urls import path, include
-from django.views.generic import TemplateView
-from django.conf import settings
-from django.conf.urls.static import static
+from core.views import index, login_page, register_page
+from core.views import RegisterView, LoginView, FeedbackView
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('api/', include('core.urls')),
-    
-    # Frontend pages
-    path('', TemplateView.as_view(template_name='index.html'), name='home'),
-    path('login/', TemplateView.as_view(template_name='login.html'), name='login'),
-    path('register/', TemplateView.as_view(template_name='register.html'), name='register'),
-    path('store/', TemplateView.as_view(template_name='store.html'), name='store'),
-]
+    path("", index, name="index"),
+    path("login/", login_page, name="login"),
+    path("register/", register_page, name="register"),
 
-# Serve static files in development
-if settings.DEBUG:
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    path("api/register/", RegisterView.as_view()),
+    path("api/login/", LoginView.as_view()),
+    path("api/feedback/", FeedbackView.as_view()),
+]
