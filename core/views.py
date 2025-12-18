@@ -5,6 +5,8 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
 from rest_framework import status
+from django.shortcuts import render
+
 
 from .models import Feedback
 from .serializers import (
@@ -75,3 +77,14 @@ class FeedbackView(APIView):
         feedbacks = Feedback.objects.filter(user=request.user)
         serializer = FeedbackSerializer(feedbacks, many=True)
         return Response(serializer.data)
+
+def index(request):
+    return render(request, "index.html")
+
+def login_page(request):
+    return render(request, "login.html")
+
+def register_page(request):
+    return render(request, "register.html")
+
+    
