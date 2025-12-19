@@ -215,7 +215,7 @@ async function register() {
   const email = document.getElementById("reg-email").value;
   const password = document.getElementById("reg-password").value;
 
-  const response = await fetch("/api/register/", {
+  const response = await fetch(`${API}/register/`, {
     method: "POST",                         // 🔴 REQUIRED
     headers: {
       "Content-Type": "application/json"
@@ -246,7 +246,7 @@ async function login() {
   const username = document.getElementById("login-username").value;
   const password = document.getElementById("login-password").value;
 
-  const response = await fetch("/api/login/", {
+  const response = await fetch(`${API}/login/`, {
     method: "POST",                         // 🔴 REQUIRED
     headers: {
       "Content-Type": "application/json"
