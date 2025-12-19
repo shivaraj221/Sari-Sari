@@ -1,28 +1,18 @@
 services:
   - type: web
-    name: feedback-app
-    runtime: python
-    plan: free
+    name: sarisari-store
+    env: python
     buildCommand: |
       pip install -r requirements.txt
       python manage.py migrate
-      python manage.py collectstatic --no-input
-    startCommand: gunicorn main.wsgi:application
+      python manage.py collectstatic --noinput
+    startCommand: gunicorn main.wsgi:application --bind 0.0.0.0:$PORT
     envVars:
-      - key: DATABASE_URL
-        fromDatabase:
-          name: feedback-db
-          property: connectionString
       - key: SECRET_KEY
         generateValue: true
       - key: DEBUG
-        value: "False"
-      - key: PYTHON_VERSION
-        value: "3.11.0"
-    healthCheckPath: /
-    autoDeploy: true
-
-databases:
-  - name: feedback-db
-    databaseName: feedback_db
-    plan: free
+        value: false
+      - key: DATABASE_URL
+        fromDatabase:
+          name: sari-sari-db  # Your PostgreSQL database name
+          property: connectionString
